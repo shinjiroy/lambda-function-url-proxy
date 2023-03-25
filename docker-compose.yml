@@ -1,0 +1,14 @@
+version: "3"
+services:
+
+  app:
+    build:
+      context: .
+    ports:
+      - ${REQUESR_PORT}:80
+    environment:
+      - LAMBDA_REQUEST_PORT=${LAMBDA_REQUEST_PORT}
+    volumes:
+      - ./src:/var/www/app
+      - ./conf/virtual.conf:/etc/apache2/sites-available/000-default.conf
+    working_dir: /var/www/app
