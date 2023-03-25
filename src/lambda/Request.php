@@ -22,12 +22,6 @@ class Request implements JsonSerializable
 
     public function __construct()
     {
-        // var_dump($_SERVER);
-        // var_dump($_COOKIE);
-        // var_dump(getallheaders());
-        // var_dump($_GET);
-        // var_dump($_POST);
-        // var_dump(file_get_contents('php://input'));
         $this->rawPath = explode('?', $_SERVER['REQUEST_URI'])[0];
         $this->rawQueryString = $_SERVER['QUERY_STRING'];
         $this->cookies = $_COOKIE;
