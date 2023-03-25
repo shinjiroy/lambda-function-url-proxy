@@ -24,8 +24,8 @@ class Lambda
             ]);
 
             $responseStr = curl_exec($ch);
-            if ($responseStr === false) {
-                throw new RuntimeException('送信失敗 : ' . curl_error($ch));
+            if (curl_errno($ch) !== 0) {
+                throw new RuntimeException('curl failed : ' . curl_error($ch));
             }
 
             return new Response($responseStr);
@@ -47,7 +47,12 @@ class Lambda
      */
     public static function back(Response $response) : void
     {
-        
+        self::response(
+            $response->getStatusCode(),
+            $response->getBody(),
+            $response->getHeaders(),
+            $response->getCookies(),
+        );
     }
 
     public static function response(int $code, string $body, array $headers = [], array $cookies = []) : void
