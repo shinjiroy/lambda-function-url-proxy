@@ -12,8 +12,8 @@ class Request implements JsonSerializable
     private string $rawPath;
     private string $rawQueryString;
     private array $cookies;
-    private array $headers;
-    private array $queryStringParameters;
+    private ?array $headers;
+    private ?array $queryStringParameters;
     private array $requestContext;
     private string $body;
     private $pathParameters = null;
@@ -33,17 +33,18 @@ class Request implements JsonSerializable
 
     public function jsonSerialize() : array
     {
-        $data = get_object_vars($this);
-
-        return $data;
+        return get_object_vars($this);
     }
 
     private function setHeaders() : void
     {
         $this->headers = [];
+
         foreach (getallheaders() as $key => $val) {
             $this->headers[strtolower($key)] = $val;
         }
+
+        if (empty($this->headers)) $this->headers = null;
     }
 
     private function setQueryStringParameters() : void
@@ -63,6 +64,8 @@ class Request implements JsonSerializable
                 }
             }
         }
+
+        if (empty($this->queryStringParameters)) $this->queryStringParameters = null;
     }
 
     private function setRequestContext() : void
@@ -73,7 +76,7 @@ class Request implements JsonSerializable
             'apiId' => 'dummy12345',
             'authentication' => null,
             'authorizer' => null, // TODO 切り替えられるようにすべき
-            'domainName' => 'dummy12345.lambda-url.' . getenv('AWS_REGION')  . '.on.aws',
+            'domainName' => 'dummy12345.lambda-url.' . $region  . '.on.aws',
             'domainPrefix' => 'dummy12345',
             'http' => [
                 'method' => $_SERVER['REQUEST_METHOD'],
@@ -109,5 +112,4 @@ class Request implements JsonSerializable
             $this->isBase64Encoded = false;
         }
     }
-
 }
