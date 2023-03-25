@@ -5,9 +5,9 @@ services:
     build:
       context: .
     ports:
-      - ${REQUESR_PORT}:80
+      - ${REQUEST_PORT}:80
     environment:
-      - LAMBDA_REQUEST_PORT=${LAMBDA_REQUEST_PORT}
+      - LAMBDA_REQUEST_URL=${LAMBDA_REQUEST_URL}
     volumes:
       - ./src:/var/www/app
       - ./conf/virtual.conf:/etc/apache2/sites-available/000-default.conf

@@ -24,7 +24,7 @@ class Request implements JsonSerializable
     {
         $this->rawPath = explode('?', $_SERVER['REQUEST_URI'])[0];
         $this->rawQueryString = $_SERVER['QUERY_STRING'];
-        $this->cookies = $_COOKIE;
+        $this->cookies = []; // TODO http拡張入れるのはダルいわパーサー作るのはダルいわで
         $this->setHeaders();
         $this->setQueryStringParameters();
         $this->setRequestContext();

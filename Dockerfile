@@ -1,6 +1,7 @@
 FROM php:apache-buster
 
-# rewrite_module読み込み
+# rewrite_module
+# a2enmod http2したいけど・・
 RUN a2enmod rewrite
 
 COPY ./src /var/www/app
