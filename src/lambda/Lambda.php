@@ -6,7 +6,7 @@ require_once dirname(__FILE__) . '/Response.php';
 class Lambda
 {
     /**
-     * LambdaのコンテナにPOSTする
+     * Lambdaのコンテナに実際のリクエストを送信する
      * 
      * @param Request $request
      * @return Response|null
@@ -16,16 +16,16 @@ class Lambda
         try {
             $ch = curl_init();
             curl_setopt_array($ch, [
-                CURLOPT_URL => getenv('LAMBDA_REQUEST_URL'),
+                CURLOPT_URL => $request->getUrl(),
                 CURLOPT_HEADER => false,
-                CURLOPT_POST => true,
+                CURLOPT_CUSTOMREQUEST => $request->getMethod(),
                 CURLOPT_POSTFIELDS => json_encode($request, JSON_UNESCAPED_SLASHES),
                 CURLOPT_RETURNTRANSFER => true
             ]);
 
             $responseStr = curl_exec($ch);
             if (curl_errno($ch) !== 0) {
-                throw new RuntimeException('curl failed : ' . curl_error($ch));
+                throw new RuntimeException('curl failed curl_errno: ' . curl_errno($ch) . ', curl_error:' . curl_error($ch));
             }
 
             return new Response($responseStr);
