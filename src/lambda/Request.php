@@ -125,6 +125,6 @@ class Request implements JsonSerializable
 
     public function getMethod() : string
     {
-        return $_SERVER['REQUEST_METHOD'];
+        return strtoupper($_SERVER['REQUEST_METHOD']);
     }
 }

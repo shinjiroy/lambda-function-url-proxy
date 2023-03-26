@@ -4,6 +4,7 @@ require_once './lambda/Request.php';
 require_once './lambda/Lambda.php';
 
 ini_set('error_log', 'php://stderr');
+error_reporting(E_ALL);
 
 try {
     $request = new Request();

@@ -18,7 +18,7 @@ class Lambda
             curl_setopt_array($ch, [
                 CURLOPT_URL => $request->getUrl(),
                 CURLOPT_HEADER => false,
-                constant('CURLOPT_' . $request->getMethod()) => true,
+                CURLOPT_CUSTOMREQUEST => $request->getMethod(),
                 CURLOPT_POSTFIELDS => json_encode($request, JSON_UNESCAPED_SLASHES),
                 CURLOPT_RETURNTRANSFER => true
             ]);
