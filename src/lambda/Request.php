@@ -22,7 +22,7 @@ class Request implements JsonSerializable
 
     public function __construct()
     {
-        $this->rawPath = explode('?', $_SERVER['REQUEST_URI'])[0];
+        $this->setRawPath();
         $this->rawQueryString = $_SERVER['QUERY_STRING'];
         $this->cookies = []; // TODO http拡張入れるのはダルいわパーサー作るのはダルいわで
         $this->setHeaders();
@@ -34,6 +34,11 @@ class Request implements JsonSerializable
     public function jsonSerialize() : array
     {
         return get_object_vars($this);
+    }
+
+    private function setRawPath() : void
+    {
+        $this->rawPath = explode('?', $_SERVER['REQUEST_URI'])[0];
     }
 
     private function setHeaders() : void
@@ -88,8 +93,8 @@ class Request implements JsonSerializable
             'requestId' => 'dummyfd5-9e7b-434f-bd42-4f8fa224b599',
             'routeKey' => '$default',
             'stage' => '$default',
-            'time' => date('d/M/Y:H:i:s O'),
-            'timeEpoch' => time(),
+            'time' => date('d/M/Y:H:i:s O', $_SERVER['REQUEST_TIME']),
+            'timeEpoch' => $_SERVER['REQUEST_TIME'],
         ];
     }
 
@@ -111,5 +116,15 @@ class Request implements JsonSerializable
             $this->body = $input;
             $this->isBase64Encoded = false;
         }
+    }
+
+    public function getUrl() : string
+    {
+        return getenv('LAMBDA_REQUEST_URL');
+    }
+
+    public function getMethod() : string
+    {
+        return $_SERVER['REQUEST_METHOD'];
     }
 }
