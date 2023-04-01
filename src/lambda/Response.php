@@ -17,14 +17,18 @@ class Response
     {
         $response = json_decode($responseStr, true);
         if (!$response) {
-            throw new RuntimeException('invalid formatted response: ' .$responseStr);
+            throw new RuntimeException('not json response: ' . $responseStr);
         }
 
-        $this->statusCode = $response['statusCode'];
-        $this->headers = $response['headers'] ?? [];
-        $this->body = $response['body'];
-        $this->setCookies($response['cookies'] ?? []);
-        $this->isBase64Encoded = $response['isBase64Encoded'] ?? false;
+        try {
+            $this->statusCode = $response['statusCode'];
+            $this->headers = $response['headers'] ?? [];
+            $this->body = $response['body'];
+            $this->setCookies($response['cookies'] ?? []);
+            $this->isBase64Encoded = $response['isBase64Encoded'] ?? false;
+        } catch (Throwable) {
+            throw new RuntimeException('invalid formatted response: ' . $responseStr);
+        }
     }
 
     public function getStatusCode() : int
